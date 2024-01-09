@@ -1,0 +1,35 @@
+plugins {
+    id 'war'
+    id 'java'
+    id "io.freefair.lombok" version "6.5.1"
+}
+
+group = 'ru.clevertec.house'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaLanguageVersion.of(17)
+    targetCompatibility = JavaLanguageVersion.of(17)
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+//    implementation 'org.springframework:spring-context:6.1.2'
+//    implementation 'org.springframework:spring-core:6.1.2'
+//    implementation 'org.springframework:spring-beans:6.1.2'
+    implementation 'org.springframework:spring-webmvc:6.1.2'
+
+    implementation 'org.hibernate:hibernate-core:6.4.1.Final'
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+test {
+    useJUnitPlatform()
+}
