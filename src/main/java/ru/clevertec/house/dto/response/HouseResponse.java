@@ -1,17 +1,16 @@
-package ru.clevertec.house.dto;
+package ru.clevertec.house.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.UUID;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HouseDto {
+public class HouseResponse {
 
     UUID uuid;
     Double area;
@@ -19,8 +18,8 @@ public class HouseDto {
     String city;
     String street;
     Integer numberHouse;
-    ZonedDateTime createDate;
-    List<PersonDto> owners;
-    List<PersonDto> residents;
+
+    //        @JsonFormat(pattern = )
+    LocalDateTime createDate;
 
 }
