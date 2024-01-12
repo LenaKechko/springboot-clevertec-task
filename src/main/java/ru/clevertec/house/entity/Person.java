@@ -1,65 +1,82 @@
 package ru.clevertec.house.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.FieldNameConstants;
+import ru.clevertec.house.entity.model.Passport;
 import ru.clevertec.house.entity.model.Sex;
 
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
-@Table(name = "persons")
 @Data
+@Entity
 @NoArgsConstructor
+@FieldNameConstants
+@Table(name = "persons")
+@ToString(exclude = {"liveHouse", "ownHouses"})
 public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
+
+    @Column(unique = true)
+    @NotNull
+    private UUID uuid;
+
     @Column
-    UUID uuid;
+    @NotNull
+    private String name;
+
     @Column
-    String name;
+    @NotNull
+    private String surname;
+
     @Column
-    String surname;
-    @Column
-    Sex sex;
-    @Column(name = "passport_series")
-    String passportSeries;
-    @Column(name = "passport_number")
-    String passportNumber;
-    @Column(name = "create_date")
-    ZonedDateTime createDate;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Sex sex;
+
+    @Embedded
+    @NotNull
+    private Passport passport;
+
+    @Column(name = "create_date", updatable = false)
+    private LocalDateTime createDate;
+
     @Column(name = "update_date")
-    ZonedDateTime updateDate;
+    private LocalDateTime updateDate;
+
+    @NotNull
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_live_house")
+    private House liveHouse;
 
     @ManyToMany
     @JoinTable(name = "owners",
             joinColumns = @JoinColumn(name = "id_person"),
             inverseJoinColumns = @JoinColumn(name = "id_house"))
-    List<House> ownHouses;
-    @ManyToMany
-    @JoinTable(name = "residents",
-            joinColumns = @JoinColumn(name = "id_person"),
-            inverseJoinColumns = @JoinColumn(name = "id_house"))
-    House liveHouse;
-
-    public void addHouseToOwn(House house) {
-        if (ownHouses == null) {
-            ownHouses = new ArrayList<>();
-        }
-        ownHouses.add(house);
-    }
+    private List<House> ownHouses;
 
 }

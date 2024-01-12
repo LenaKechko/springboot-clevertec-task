@@ -17,6 +17,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.FieldNameConstants;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,9 +25,10 @@ import java.util.UUID;
 
 @Data
 @Entity
-@ToString(exclude = {"residents", "owners"})
 @NoArgsConstructor
+@FieldNameConstants
 @Table(name = "houses")
+@ToString(exclude = {"residents", "owners"})
 public class House {
 
     @Id
