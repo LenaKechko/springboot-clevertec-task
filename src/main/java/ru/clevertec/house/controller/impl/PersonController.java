@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.clevertec.house.controller.IController;
 import ru.clevertec.house.dto.request.PersonRequest;
+import ru.clevertec.house.dto.response.HouseResponse;
 import ru.clevertec.house.dto.response.PersonResponse;
-import ru.clevertec.house.entity.House;
 import ru.clevertec.house.exception.EntityNotFoundException;
-import ru.clevertec.house.service.impl.PersonService;
+import ru.clevertec.house.service.PersonService;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,7 +25,7 @@ import java.util.UUID;
 public class PersonController implements IController<PersonResponse, PersonRequest> {
 
     @Autowired
-    private PersonService service;
+    private PersonService<PersonResponse, PersonRequest> service;
 
     @Override
     @GetMapping
@@ -35,7 +35,7 @@ public class PersonController implements IController<PersonResponse, PersonReque
 
     @Override
     @GetMapping("/{uuid}")
-    public ResponseEntity<PersonResponse> get(@PathVariable UUID uuid) {
+    public ResponseEntity<PersonResponse> get(@PathVariable("uuid") UUID uuid) {
         try {
             return ResponseEntity.ok(service.get(uuid));
         } catch (EntityNotFoundException e) {
@@ -51,7 +51,7 @@ public class PersonController implements IController<PersonResponse, PersonReque
 
     @Override
     @PutMapping("/{uuid}")
-    public void update(@PathVariable UUID uuid,
+    public void update(@PathVariable("uuid") UUID uuid,
                        @RequestBody PersonRequest entity) {
         try {
             service.update(uuid, entity);
@@ -63,12 +63,16 @@ public class PersonController implements IController<PersonResponse, PersonReque
 
     @Override
     @DeleteMapping("/{uuid}")
-    public void delete(@PathVariable UUID uuid) {
+    public void delete(@PathVariable("uuid") UUID uuid) {
         service.delete(uuid);
     }
 
     @GetMapping("/{uuid}/owners")
-    public List<House> getPersonOwningHouse(@PathVariable UUID uuid) {
-        return null;
+    public ResponseEntity<List<HouseResponse>> getOwningHouses(@PathVariable UUID uuid) {
+        try {
+            return ResponseEntity.ok(service.getOwningHouses(uuid));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().header(e.getMessage()).build();
+        }
     }
 }

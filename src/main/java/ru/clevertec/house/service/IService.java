@@ -14,4 +14,5 @@ public interface IService<T, K> {
     void update(UUID uuid, K entity);
 
     void delete(UUID uuid);
+
 }

@@ -14,4 +14,8 @@ public class HouseRequest {
     String city;
     String street;
     Integer numberHouse;
+//    @JsonProperty("uuid_owners")
+//    List<UUID> uuidOwners;
+//    @JsonProperty("uuid_residents")
+//    List<UUID> uuidResidents;
 }

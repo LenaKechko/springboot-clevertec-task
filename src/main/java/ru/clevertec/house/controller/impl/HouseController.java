@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.clevertec.house.controller.IController;
 import ru.clevertec.house.dto.request.HouseRequest;
 import ru.clevertec.house.dto.response.HouseResponse;
-import ru.clevertec.house.entity.Person;
+import ru.clevertec.house.dto.response.PersonResponse;
 import ru.clevertec.house.exception.EntityNotFoundException;
-import ru.clevertec.house.service.impl.HouseService;
+import ru.clevertec.house.service.HouseService;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,7 +25,7 @@ import java.util.UUID;
 public class HouseController implements IController<HouseResponse, HouseRequest> {
 
     @Autowired
-    private HouseService service;
+    private HouseService<HouseResponse, HouseRequest> service;
 //    @Autowired
 //    private ObjectMapper mapper;
 
@@ -40,7 +40,7 @@ public class HouseController implements IController<HouseResponse, HouseRequest>
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<HouseResponse> get(@PathVariable UUID uuid) {
+    public ResponseEntity<HouseResponse> get(@PathVariable("uuid") UUID uuid) {
         try {
             return ResponseEntity.ok(service.get(uuid));
         } catch (EntityNotFoundException e) {
@@ -54,7 +54,7 @@ public class HouseController implements IController<HouseResponse, HouseRequest>
     }
 
     @PutMapping("/{uuid}")
-    public void update(@PathVariable UUID uuid,
+    public void update(@PathVariable("uuid") UUID uuid,
                        @RequestBody HouseRequest entity) {
         try {
             service.update(uuid, entity);
@@ -65,17 +65,16 @@ public class HouseController implements IController<HouseResponse, HouseRequest>
     }
 
     @DeleteMapping("/{uuid}")
-    public void delete(@PathVariable UUID uuid) {
+    public void delete(@PathVariable("uuid") UUID uuid) {
         service.delete(uuid);
     }
 
     @GetMapping("/{uuid}/residents")
-    public List<Person> getPersonLivingInHouse(@PathVariable UUID uuid) {
-        return null;
-    }
-
-    @GetMapping("/{uuid}/owners")
-    public List<Person> getPersonOwningHouse(@PathVariable UUID uuid) {
-        return null;
+    public ResponseEntity<List<PersonResponse>> getPersonsLivingInHouse(@PathVariable("uuid") UUID uuid) {
+        try {
+            return ResponseEntity.ok(service.getPersonsLivingInHouse(uuid));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().header(e.getMessage()).build();
+        }
     }
 }

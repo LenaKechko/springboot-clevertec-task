@@ -18,6 +18,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.UuidGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,7 +38,7 @@ public class House {
     private Integer id;
 
     @Column
-    @NotNull
+    @UuidGenerator
     private UUID uuid;
 
     @Column
@@ -59,17 +61,17 @@ public class House {
     @NotNull
     private Integer numberHouse;
 
-    @Column(name = "create_date", insertable= true, updatable = false)
+    @Column(name = "create_date", insertable = true, updatable = false)
     @NotNull
-    //!!!!
-//    @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSS", iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSS", iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createDate;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "liveHouse", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
+            mappedBy = "liveHouse", fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference
     private List<Person> residents;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "owners",
             joinColumns = @JoinColumn(name = "id_house"),
             inverseJoinColumns = @JoinColumn(name = "id_person"))

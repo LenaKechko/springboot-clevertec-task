@@ -11,7 +11,7 @@ import ru.clevertec.house.entity.House;
 public interface HouseMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "uuid", expression = "java(java.util.UUID.randomUUID())")
+    @Mapping(target = "uuid", ignore = true)//, expression = "java(java.util.UUID.randomUUID())")
     @Mapping(target = "createDate", expression = "java(java.time.LocalDateTime.now())")
     House toHouse(HouseRequest houseDto);
 

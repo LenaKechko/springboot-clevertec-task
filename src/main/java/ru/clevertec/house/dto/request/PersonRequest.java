@@ -1,12 +1,12 @@
 package ru.clevertec.house.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.clevertec.house.entity.model.Passport;
 import ru.clevertec.house.entity.model.Sex;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -18,5 +18,6 @@ public class PersonRequest {
     String surname;
     Sex sex;
     Passport passport;
-//    HouseRequest house;
+    @JsonProperty("uuid_house")
+    UUID uuidHouse;
 }

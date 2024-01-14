@@ -14,6 +14,7 @@ public interface PersonMapper {
     @Mapping(target = "uuid", expression = "java(java.util.UUID.randomUUID())")
     @Mapping(target = "createDate", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "updateDate", expression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "liveHouse", ignore = true)
     Person toPerson(PersonRequest personDto);
 
     PersonResponse toPersonDTO(Person person);

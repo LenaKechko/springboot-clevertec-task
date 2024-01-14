@@ -14,4 +14,5 @@ public interface IRepository<T> {
     void update(T entity);
 
     void delete(UUID uuid);
+
 }
