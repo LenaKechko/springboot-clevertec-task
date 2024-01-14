@@ -21,10 +21,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldNameConstants;
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.clevertec.house.entity.model.Passport;
 import ru.clevertec.house.entity.model.Sex;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,9 +64,11 @@ public class Person {
     private Passport passport;
 
     @Column(name = "create_date", updatable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSS", iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createDate;
 
     @Column(name = "update_date")
+    @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSS", iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime updateDate;
 
     @NotNull
@@ -80,4 +84,17 @@ public class Person {
             inverseJoinColumns = @JoinColumn(name = "id_house"))
     private List<House> ownHouses;
 
+    public void addHouseToOwnHouse(House house) {
+        if (ownHouses == null) {
+            ownHouses = new ArrayList<>();
+        }
+        ownHouses.add(house);
+    }
+
+    public void addHouseToOwnHouse(List<House> house) {
+        if (ownHouses == null) {
+            ownHouses = new ArrayList<>();
+        }
+        ownHouses.addAll(house);
+    }
 }

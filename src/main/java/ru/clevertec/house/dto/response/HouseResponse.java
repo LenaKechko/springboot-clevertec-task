@@ -1,11 +1,12 @@
 package ru.clevertec.house.dto.response;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -19,7 +20,7 @@ public class HouseResponse {
     String street;
     Integer numberHouse;
 
-    //        @JsonFormat(pattern = )
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     LocalDateTime createDate;
 
 }

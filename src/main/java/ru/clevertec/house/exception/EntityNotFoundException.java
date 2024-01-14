@@ -7,6 +7,6 @@ public class EntityNotFoundException extends RuntimeException {
     }
 
     public static EntityNotFoundException of(Class<?> clazz, Object obj) {
-        return new EntityNotFoundException("Not fount " + clazz.getSimpleName() + " with value " + obj);
+        return new EntityNotFoundException(clazz.getSimpleName() + " not fount (uuid = " + obj + ")");
     }
 }

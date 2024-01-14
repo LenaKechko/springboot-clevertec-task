@@ -13,7 +13,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonResponse {
+public class PersonWithoutLiveHouseResponse {
 
     UUID uuid;
     String name;
@@ -26,6 +26,4 @@ public class PersonResponse {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     LocalDateTime updateDate;
-
-    HouseResponse liveHouse;
 }

@@ -5,16 +5,14 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.clevertec.house.entity.House;
-import ru.clevertec.house.entity.Person;
-import ru.clevertec.house.exception.EntityNotFoundException;
-import ru.clevertec.house.repository.HouseRepository;
+import ru.clevertec.house.repository.IRepository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class HouseRepositoryImpl extends HouseRepository<House> {
+public class HouseRepositoryImpl implements IRepository<House> {
 
 //    @Autowired
 //    private JdbcTemplate jdbcTemplate;
@@ -60,14 +58,6 @@ public class HouseRepositoryImpl extends HouseRepository<House> {
         session.createQuery("DELETE FROM House h WHERE h.uuid = :uuidParam")
                 .setParameter("uuidParam", uuid)
                 .executeUpdate();
-    }
-
-    @Override
-    public List<Person> findPersonsLivingInHouse(UUID uuid) {
-        Session session = sessionFactory.getCurrentSession();
-        House house = findByUuid(uuid)
-                .orElseThrow(() -> EntityNotFoundException.of(House.class, uuid));
-        return house.getResidents();
     }
 
 }

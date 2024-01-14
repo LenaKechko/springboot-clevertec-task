@@ -8,6 +8,7 @@ import ru.clevertec.house.dto.response.HouseResponse;
 import ru.clevertec.house.dto.response.PersonResponse;
 import ru.clevertec.house.entity.House;
 import ru.clevertec.house.entity.Person;
+import ru.clevertec.house.exception.BadClientRequestException;
 import ru.clevertec.house.exception.EntityNotFoundException;
 import ru.clevertec.house.mapper.HouseMapper;
 import ru.clevertec.house.mapper.PersonMapper;
@@ -20,7 +21,7 @@ import java.util.UUID;
 
 @Service
 @Transactional
-public class PersonServiceImpl extends PersonService<PersonResponse, PersonRequest> {
+public class PersonServiceImpl implements PersonService<PersonResponse, PersonRequest> {
 
     @Autowired
     private PersonMapper personMapper;
@@ -37,14 +38,14 @@ public class PersonServiceImpl extends PersonService<PersonResponse, PersonReque
     @Override
     public List<PersonResponse> getAll() {
         return personRepository.findAll().stream()
-                .map(personMapper::toPersonDTO)
+                .map(personMapper::toPersonResponse)
                 .toList();
     }
 
     @Override
     public PersonResponse get(UUID uuid) {
         return personRepository.findByUuid(uuid)
-                .map(personMapper::toPersonDTO)
+                .map(personMapper::toPersonResponse)
                 .orElseThrow(() -> EntityNotFoundException.of(Person.class, uuid));
     }
 
@@ -52,6 +53,9 @@ public class PersonServiceImpl extends PersonService<PersonResponse, PersonReque
     @Transactional
     public UUID create(PersonRequest entity) {
         Person personToSave = personMapper.toPerson(entity);
+        if (entity.getUuidHouse() == null) {
+            throw BadClientRequestException.of(Person.class, "should live in a house!");
+        }
         personToSave.setLiveHouse(getLiveHouse(entity));
         return personRepository.save(personToSave);
     }
@@ -79,7 +83,7 @@ public class PersonServiceImpl extends PersonService<PersonResponse, PersonReque
         return personRepository.findByUuid(uuid)
                 .orElseThrow(() -> EntityNotFoundException.of(Person.class, uuid))
                 .getOwnHouses().stream()
-                .map(houseMapper::toHouseDTO)
+                .map(houseMapper::toHouseResponse)
                 .toList();
     }
 

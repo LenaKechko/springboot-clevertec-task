@@ -22,6 +22,7 @@ import org.hibernate.annotations.UuidGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -76,5 +77,34 @@ public class House {
             joinColumns = @JoinColumn(name = "id_house"),
             inverseJoinColumns = @JoinColumn(name = "id_person"))
     private List<Person> owners;
+
+    public void addResidentToHouse(Person person) {
+        if (residents == null) {
+            residents = new ArrayList<>();
+        }
+        residents.add(person);
+    }
+
+    public void addResidentToHouse(List<Person> person) {
+        if (residents == null) {
+            residents = new ArrayList<>();
+        }
+        residents.addAll(person);
+    }
+
+    public void addOwnerToHouse(Person person) {
+        if (owners == null) {
+            owners = new ArrayList<>();
+        }
+        owners.add(person);
+    }
+
+    public void addOwnerToHouse(List<Person> person) {
+        if (owners == null) {
+            owners = new ArrayList<>();
+        }
+        owners.addAll(person);
+    }
+
 
 }

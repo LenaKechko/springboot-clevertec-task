@@ -10,7 +10,7 @@ public interface IController<T, K> {
 
     ResponseEntity<T> get(UUID uuid);
 
-    UUID create(K entity);
+    ResponseEntity<UUID> create(K entity);
 
     void update(UUID uuid, K entity);
 

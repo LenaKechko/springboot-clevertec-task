@@ -3,6 +3,7 @@ package ru.clevertec.house.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import ru.clevertec.house.dto.response.PersonWithoutLiveHouseResponse;
 import ru.clevertec.house.entity.Person;
 import ru.clevertec.house.dto.request.PersonRequest;
 import ru.clevertec.house.dto.response.PersonResponse;
@@ -17,7 +18,9 @@ public interface PersonMapper {
     @Mapping(target = "liveHouse", ignore = true)
     Person toPerson(PersonRequest personDto);
 
-    PersonResponse toPersonDTO(Person person);
+    PersonResponse toPersonResponse(Person person);
+
+    PersonWithoutLiveHouseResponse toPersonWithoutLiveHouseResponse(Person person);
 
     Person update(@MappingTarget Person person, PersonRequest personDto);
 }

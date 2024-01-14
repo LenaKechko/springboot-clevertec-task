@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.clevertec.house.controller.IController;
 import ru.clevertec.house.dto.request.HouseRequest;
 import ru.clevertec.house.dto.response.HouseResponse;
-import ru.clevertec.house.dto.response.PersonResponse;
+import ru.clevertec.house.dto.response.PersonWithoutLiveHouseResponse;
 import ru.clevertec.house.exception.EntityNotFoundException;
 import ru.clevertec.house.service.HouseService;
 
@@ -26,17 +26,10 @@ public class HouseController implements IController<HouseResponse, HouseRequest>
 
     @Autowired
     private HouseService<HouseResponse, HouseRequest> service;
-//    @Autowired
-//    private ObjectMapper mapper;
-
-//    @Autowired
-//    private HttpHeaders httpHeaders;
 
     @GetMapping
     public ResponseEntity<List<HouseResponse>> getAll() {
         return ResponseEntity.ok(service.getAll());
-//        return new ResponseEntity<>(mapper.writeValueAsString(service.getAll()),
-//                httpHeaders, HttpStatus.OK);
     }
 
     @GetMapping("/{uuid}")
@@ -44,13 +37,13 @@ public class HouseController implements IController<HouseResponse, HouseRequest>
         try {
             return ResponseEntity.ok(service.get(uuid));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().header(e.getMessage()).build();
+            throw new EntityNotFoundException(e.getMessage());
         }
     }
 
     @PostMapping
-    public UUID create(@RequestBody HouseRequest entity) {
-        return service.create(entity);
+    public ResponseEntity<UUID> create(@RequestBody HouseRequest entity) {
+        return ResponseEntity.ok(service.create(entity));
     }
 
     @PutMapping("/{uuid}")
@@ -60,7 +53,7 @@ public class HouseController implements IController<HouseResponse, HouseRequest>
             service.update(uuid, entity);
 //            return ResponseEntity.ok().build();
         } catch (EntityNotFoundException e) {
-//            return ResponseEntity.notFound().header(e.getMessage()).build();
+            throw new EntityNotFoundException(e.getMessage());
         }
     }
 
@@ -70,11 +63,11 @@ public class HouseController implements IController<HouseResponse, HouseRequest>
     }
 
     @GetMapping("/{uuid}/residents")
-    public ResponseEntity<List<PersonResponse>> getPersonsLivingInHouse(@PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<List<PersonWithoutLiveHouseResponse>> getPersonsLivingInHouse(@PathVariable("uuid") UUID uuid) {
         try {
             return ResponseEntity.ok(service.getPersonsLivingInHouse(uuid));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().header(e.getMessage()).build();
+            throw new EntityNotFoundException(e.getMessage());
         }
     }
 }

@@ -14,6 +14,7 @@ import ru.clevertec.house.controller.IController;
 import ru.clevertec.house.dto.request.PersonRequest;
 import ru.clevertec.house.dto.response.HouseResponse;
 import ru.clevertec.house.dto.response.PersonResponse;
+import ru.clevertec.house.exception.BadClientRequestException;
 import ru.clevertec.house.exception.EntityNotFoundException;
 import ru.clevertec.house.service.PersonService;
 
@@ -39,14 +40,18 @@ public class PersonController implements IController<PersonResponse, PersonReque
         try {
             return ResponseEntity.ok(service.get(uuid));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().header(e.getMessage()).build();
+            throw new EntityNotFoundException(e.getMessage());
         }
     }
 
     @Override
     @PostMapping
-    public UUID create(@RequestBody PersonRequest entity) {
-        return service.create(entity);
+    public ResponseEntity<UUID> create(@RequestBody PersonRequest entity) {
+        try {
+            return ResponseEntity.ok(service.create(entity));
+        } catch (BadClientRequestException e) {
+            throw new BadClientRequestException(e.getMessage());
+        }
     }
 
     @Override
@@ -57,7 +62,7 @@ public class PersonController implements IController<PersonResponse, PersonReque
             service.update(uuid, entity);
 //            return ResponseEntity.ok().build();
         } catch (EntityNotFoundException e) {
-//            return ResponseEntity.notFound().header(e.getMessage()).build();
+            throw new EntityNotFoundException(e.getMessage());
         }
     }
 
@@ -72,7 +77,7 @@ public class PersonController implements IController<PersonResponse, PersonReque
         try {
             return ResponseEntity.ok(service.getOwningHouses(uuid));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().header(e.getMessage()).build();
+            throw new EntityNotFoundException(e.getMessage());
         }
     }
 }

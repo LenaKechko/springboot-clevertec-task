@@ -30,6 +30,8 @@ CREATE TABLE IF NOT EXISTS persons
     passport_number character varying(10),
     create_date timestamp(3) with time zone,
     update_date timestamp(3) with time zone,
+    id_live_house integer NOT NULL,
+    FOREIGN KEY (id_live_house) REFERENCES houses(id),
     CONSTRAINT unique_passport UNIQUE(passport_series, passport_number)
 );
 
@@ -37,15 +39,6 @@ CREATE TABLE IF NOT EXISTS owners
 (
     id serial PRIMARY KEY,
     id_house integer,
-    id_person integer,
-    FOREIGN KEY (id_house) REFERENCES houses(id),
-    FOREIGN KEY (id_person) REFERENCES persons(id)
-);
-
-CREATE TABLE IF NOT EXISTS residents
-(
-    id serial PRIMARY KEY,
-    id_house integer NOT NULL,
     id_person integer,
     FOREIGN KEY (id_house) REFERENCES houses(id),
     FOREIGN KEY (id_person) REFERENCES persons(id)
@@ -62,26 +55,26 @@ INSERT INTO houses(uuid, area, country, city, street, number, create_date)
 INSERT INTO houses(uuid, area, country, city, street, number, create_date)
     VALUES (gen_random_uuid(), '65.3', 'Беларусь', 'Гомель', 'Головацкого', 57, '2016-05-27T15:02:07.005');
 
-INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date)
-    values (gen_random_uuid(), 'Антон', 'Иванов', 'MALE', 'HB', '1002030', '2001-12-01T10:10:10.100', '2001-12-01T10:10:10.100');
-INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date)
-    values (gen_random_uuid(), 'Иван', 'Павлов', 'MALE', 'HB', '2003040', '2010-05-17T15:24:59.632', '2010-05-17T15:24:59.632');
-INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date)
-    values (gen_random_uuid(), 'Александр', 'Шахов', 'MALE', 'HB', '1502030', '2017-09-11T11:11:11.111', '2017-09-11T11:11:11.111');
-INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date)
-    values (gen_random_uuid(), 'Ольга', 'Легенькая', 'FEMALE', 'HB', '7894561', '2003-04-05T17:17:00.000', '2003-04-05T17:17:00.000');
-INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date)
-    values (gen_random_uuid(), 'Елена', 'Самойлова', 'FEMALE', 'HB', '9876541', '1999-10-29T09:06:10.058', '1999-10-29T09:06:10.058');
-INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date)
-    values (gen_random_uuid(), 'Захар', 'Семенов', 'MALE', 'HB', '3571590', '1998-11-20T11:20:35.561', '1998-11-20T11:20:35.561');
-INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date)
-    values (gen_random_uuid(), 'Роман', 'Самец', 'MALE', 'HB', '8526540', '2000-07-03T15:53:23.125', '2000-07-03T15:53:23.125');
-INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date)
-    values (gen_random_uuid(), 'Ирина', 'Симхович', 'FEMALE', 'HB', '3210456', '2002-06-30T15:26:37.456', '2002-06-30T15:26:37.456');
-INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date)
-    values (gen_random_uuid(), 'Екатерина', 'Великая', 'FEMALE', 'HB', '6521987', '2011-10-21T23:25:27.290', '2011-10-21T23:25:27.290');
-INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date)
-    values (gen_random_uuid(), 'Дмитрий', 'Качевой', 'MALE', 'HB', '2345678', '2015-02-13T16:31:15.536', '2015-02-13T16:31:15.536');
+INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date, id_live_house)
+    values (gen_random_uuid(), 'Антон', 'Иванов', 'MALE', 'HB', '1002030', '2001-12-01T10:10:10.100', '2001-12-01T10:10:10.100', 1);
+INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date, id_live_house)
+    values (gen_random_uuid(), 'Иван', 'Павлов', 'MALE', 'HB', '2003040', '2010-05-17T15:24:59.632', '2010-05-17T15:24:59.632', 1);
+INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date, id_live_house)
+    values (gen_random_uuid(), 'Александр', 'Шахов', 'MALE', 'HB', '1502030', '2017-09-11T11:11:11.111', '2017-09-11T11:11:11.111', 2);
+INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date, id_live_house)
+    values (gen_random_uuid(), 'Ольга', 'Легенькая', 'FEMALE', 'HB', '7894561', '2003-04-05T17:17:00.000', '2003-04-05T17:17:00.000', 2);
+INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date, id_live_house)
+    values (gen_random_uuid(), 'Елена', 'Самойлова', 'FEMALE', 'HB', '9876541', '1999-10-29T09:06:10.058', '1999-10-29T09:06:10.058', 3);
+INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date, id_live_house)
+    values (gen_random_uuid(), 'Захар', 'Семенов', 'MALE', 'HB', '3571590', '1998-11-20T11:20:35.561', '1998-11-20T11:20:35.561', 3);
+INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date, id_live_house)
+    values (gen_random_uuid(), 'Роман', 'Самец', 'MALE', 'HB', '8526540', '2000-07-03T15:53:23.125', '2000-07-03T15:53:23.125', 4);
+INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date, id_live_house)
+    values (gen_random_uuid(), 'Ирина', 'Симхович', 'FEMALE', 'HB', '3210456', '2002-06-30T15:26:37.456', '2002-06-30T15:26:37.456', 4);
+INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date, id_live_house)
+    values (gen_random_uuid(), 'Екатерина', 'Великая', 'FEMALE', 'HB', '6521987', '2011-10-21T23:25:27.290', '2011-10-21T23:25:27.290', 5);
+INSERT INTO persons(uuid, name, surname, sex, passport_series, passport_number, create_date, update_date, id_live_house)
+    values (gen_random_uuid(), 'Дмитрий', 'Качевой', 'MALE', 'HB', '2345678', '2015-02-13T16:31:15.536', '2015-02-13T16:31:15.536', 5);
 
 INSERT INTO owners(id_house, id_person)
     values (1, 2);
@@ -98,15 +91,21 @@ INSERT INTO owners(id_house, id_person)
 INSERT INTO owners(id_house, id_person)
     values (5, 1);
 
-INSERT INTO residents(id_house, id_person)
-    values (5, null);
-INSERT INTO residents(id_house, id_person)
-    values (1, 1);
-INSERT INTO residents(id_house, id_person)
-    values (1, 2);
-INSERT INTO residents(id_house, id_person)
-    values (2, 4);
-INSERT INTO residents(id_house, id_person)
-    values (3, 6);
-INSERT INTO residents(id_house, id_person)
-    values (4, 10);
+    {
+        "name": "Антон",
+        "surname": "Иванов",
+        "sex": "MALE",
+        "passport": {
+            "passportSeries": "HB",
+            "passportNumber": "1012030"
+        },
+        "uuid_house": "16cc62f6-2aa9-45d3-ae82-3c4bf075390c"
+    }
+
+    {
+        "area": 20.1,
+        "country": "Беларусь",
+        "city": "Гомель",
+        "street": "Советская",
+        "numberHouse": 15
+    }

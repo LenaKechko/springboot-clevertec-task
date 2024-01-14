@@ -15,7 +15,7 @@ public interface HouseMapper {
     @Mapping(target = "createDate", expression = "java(java.time.LocalDateTime.now())")
     House toHouse(HouseRequest houseDto);
 
-    HouseResponse toHouseDTO(House house);
+    HouseResponse toHouseResponse(House house);
 
     House update(@MappingTarget House house, HouseRequest houseDto);
 }

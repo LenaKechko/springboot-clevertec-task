@@ -5,23 +5,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.house.dto.request.HouseRequest;
 import ru.clevertec.house.dto.response.HouseResponse;
-import ru.clevertec.house.dto.response.PersonResponse;
+import ru.clevertec.house.dto.response.PersonWithoutLiveHouseResponse;
 import ru.clevertec.house.entity.House;
+import ru.clevertec.house.entity.Person;
 import ru.clevertec.house.exception.EntityNotFoundException;
 import ru.clevertec.house.mapper.HouseMapper;
 import ru.clevertec.house.mapper.PersonMapper;
-import ru.clevertec.house.repository.HouseRepository;
+import ru.clevertec.house.repository.IRepository;
 import ru.clevertec.house.service.HouseService;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
 @Transactional
-public class HouseServiceImpl extends HouseService<HouseResponse, HouseRequest> {
+public class HouseServiceImpl implements HouseService<HouseResponse, HouseRequest> {
 
     @Autowired
-    private HouseRepository<House> houseRepository;
+    private IRepository<House> houseRepository;
+
+    @Autowired
+    private IRepository<Person> personRepository;
 
     @Autowired
     private HouseMapper houseMapper;
@@ -31,27 +36,31 @@ public class HouseServiceImpl extends HouseService<HouseResponse, HouseRequest> 
 
     public List<HouseResponse> getAll() {
         return houseRepository.findAll().stream()
-                .map(houseMapper::toHouseDTO)
+                .map(houseMapper::toHouseResponse)
                 .toList();
     }
 
     @Override
     public HouseResponse get(UUID uuid) {
         return houseRepository.findByUuid(uuid)
-                .map(houseMapper::toHouseDTO)
+                .map(houseMapper::toHouseResponse)
                 .orElseThrow(() -> EntityNotFoundException.of(House.class, uuid));
     }
 
     @Override
     public UUID create(HouseRequest entity) {
-        return houseRepository.save(houseMapper.toHouse(entity));
+        House houseToSave = houseMapper.toHouse(entity);
+        setListOwners(houseToSave, entity);
+        return houseRepository.save(houseToSave);
     }
 
     @Override
     public void update(UUID uuid, HouseRequest entity) {
         House houseToUpdate = houseRepository.findByUuid(uuid)
                 .orElseThrow(() -> EntityNotFoundException.of(House.class, uuid));
-        houseRepository.update(houseMapper.update(houseToUpdate, entity));
+        houseToUpdate = houseMapper.update(houseToUpdate, entity);
+        setListOwners(houseToUpdate, entity);
+        houseRepository.update(houseToUpdate);
     }
 
     @Override
@@ -59,9 +68,27 @@ public class HouseServiceImpl extends HouseService<HouseResponse, HouseRequest> 
         houseRepository.delete(uuid);
     }
 
-    public List<PersonResponse> getPersonsLivingInHouse(UUID uuid) {
-        return houseRepository.findPersonsLivingInHouse(uuid).stream()
-                .map(personMapper::toPersonDTO)
+    public List<PersonWithoutLiveHouseResponse> getPersonsLivingInHouse(UUID uuid) {
+        return houseRepository.findByUuid(uuid)
+                .orElseThrow(() -> EntityNotFoundException.of(House.class, uuid))
+                .getResidents()
+                .stream()
+                .map(personMapper::toPersonWithoutLiveHouseResponse)
+                .toList();
+    }
+
+    private void setListOwners(House house, HouseRequest entity) {
+        List<UUID> temp = entity.getUuidOwners();
+        if (temp != null) {
+            house.addOwnerToHouse(getPersons(temp));
+        }
+    }
+
+    private List<Person> getPersons(List<UUID> entity) {
+        return entity.stream()
+                .map(personRepository::findByUuid)
+                .map(el -> el.orElse(null))
+                .filter(Objects::nonNull)
                 .toList();
     }
 

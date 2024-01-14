@@ -1,8 +1,12 @@
 package ru.clevertec.house.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -14,8 +18,8 @@ public class HouseRequest {
     String city;
     String street;
     Integer numberHouse;
-//    @JsonProperty("uuid_owners")
-//    List<UUID> uuidOwners;
-//    @JsonProperty("uuid_residents")
-//    List<UUID> uuidResidents;
+
+    @JsonProperty("uuid_owners")
+    List<UUID> uuidOwners;
+
 }

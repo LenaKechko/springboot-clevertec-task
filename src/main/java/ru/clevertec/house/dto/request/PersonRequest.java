@@ -18,6 +18,7 @@ public class PersonRequest {
     String surname;
     Sex sex;
     Passport passport;
+
     @JsonProperty("uuid_house")
     UUID uuidHouse;
 }
