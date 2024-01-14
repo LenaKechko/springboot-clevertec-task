@@ -16,6 +16,7 @@ import ru.clevertec.house.dto.response.HouseResponse;
 import ru.clevertec.house.dto.response.PersonResponse;
 import ru.clevertec.house.exception.BadClientRequestException;
 import ru.clevertec.house.exception.EntityNotFoundException;
+import ru.clevertec.house.exception.ValidateException;
 import ru.clevertec.house.service.PersonService;
 
 import java.util.List;
@@ -60,7 +61,6 @@ public class PersonController implements IController<PersonResponse, PersonReque
                        @RequestBody PersonRequest entity) {
         try {
             service.update(uuid, entity);
-//            return ResponseEntity.ok().build();
         } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException(e.getMessage());
         }
@@ -69,7 +69,11 @@ public class PersonController implements IController<PersonResponse, PersonReque
     @Override
     @DeleteMapping("/{uuid}")
     public void delete(@PathVariable("uuid") UUID uuid) {
-        service.delete(uuid);
+        try {
+            service.delete(uuid);
+        } catch (BadClientRequestException e) {
+            throw new BadClientRequestException(e.getMessage());
+        }
     }
 
     @GetMapping("/{uuid}/owners")
