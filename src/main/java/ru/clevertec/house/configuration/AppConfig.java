@@ -14,7 +14,7 @@ import java.util.List;
 
 
 /**
- * Конфигурационный класс для работы с базой данных
+ * Конфигурационный класс для приложения
  */
 @EnableWebMvc
 @Configuration
@@ -24,25 +24,9 @@ import java.util.List;
 @PropertySource(value = "classpath:application.yml")
 public class AppConfig {
 
-
-//    /**
-//     * Поле отвечающее на вопрос: необходимо ли мигрировать данные в БД с помощью Liquibase
-//     */
-//    @Value("${liquibase.enable}")
-//    private String liquibaseEnable;
-//    /**
-//     * Путь, по которому находятся changeLog'и для Liquibase
-//     */
-//    @Value("${liquibase.change-log}")
-//    private String liquibaseChangeLog;
-
     /**
-     * Бин для подключения к БД
-     *
-     * @return возвращается DataSource для дальнейшей работы с БД
+     * Бин для настройки ответа от сервера в нужном формате
      */
-
-
     @Bean
     public HttpHeaders header() {
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -51,28 +35,4 @@ public class AppConfig {
         return httpHeaders;
     }
 
-//    @Bean
-//    public ObjectMapper mapper() {
-//        ObjectMapper mapper = new ObjectMapper();
-//        mapper.registerModule(new JavaTimeModule());
-//        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-//        return mapper;
-//    }
-
-
-//
-//    /**
-//     * Бин для накатывания данных в БД
-//     *
-//     * @return настроенный объект для миграции данных
-//     */
-//    @SneakyThrows
-//    @Bean
-//    public SpringLiquibase migrationDB() {
-//        SpringLiquibase liquibase = new SpringLiquibase();
-//        liquibase.setShouldRun(Boolean.parseBoolean(liquibaseEnable));
-//        liquibase.setChangeLog(liquibaseChangeLog);
-//        liquibase.setDataSource(dataSource());
-//        return liquibase;
-//    }
 }

@@ -30,6 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Класс определяющий Person
+ */
 @Data
 @Entity
 @NoArgsConstructor
@@ -38,39 +41,70 @@ import java.util.UUID;
 @ToString(exclude = {"liveHouse", "ownHouses"})
 public class Person {
 
+    /**
+     * Уникальный идентификатор
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    /**
+     * Уникальный uuid
+     */
     @Column(unique = true)
     @NotNull
     private UUID uuid;
 
+    /**
+     * Имя
+     */
     @Column
     @NotNull
     private String name;
 
+    /**
+     * Фамилия
+     */
     @Column
     @NotNull
     private String surname;
 
+    /**
+     * Пол
+     * Может быть только FEMALE и MALE
+     */
     @Column
     @NotNull
     @Enumerated(EnumType.STRING)
     private Sex sex;
 
+    /**
+     * Объект паспорт
+     */
     @Embedded
     @NotNull
     private Passport passport;
 
+    /**
+     * Дата создания
+     * Не обновляется, создается единожды
+     */
     @Column(name = "create_date", updatable = false)
     @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSS", iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createDate;
 
+    /**
+     * Дата обновления
+     * Обновляется каждый раз при изменении сущности
+     */
     @Column(name = "update_date")
     @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSS", iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime updateDate;
 
+    /**
+     * Дом, в котором живет Person
+     * Обязательное поле
+     */
     @NotNull
     @JsonBackReference
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
@@ -78,12 +112,18 @@ public class Person {
     @JoinColumn(name = "id_live_house")
     private House liveHouse;
 
+    /**
+     * Список владельцев среди Person
+     */
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "owners",
             joinColumns = @JoinColumn(name = "id_person"),
             inverseJoinColumns = @JoinColumn(name = "id_house"))
     private List<House> ownHouses;
 
+    /**
+     * Метод для добавления дома во владении
+     */
     public void addHouseToOwnHouse(House house) {
         if (ownHouses == null) {
             ownHouses = new ArrayList<>();
@@ -91,6 +131,9 @@ public class Person {
         ownHouses.add(house);
     }
 
+    /**
+     * Метод для добавления домов во владении person
+     */
     public void addHouseToOwnHouse(List<House> house) {
         if (ownHouses == null) {
             ownHouses = new ArrayList<>();

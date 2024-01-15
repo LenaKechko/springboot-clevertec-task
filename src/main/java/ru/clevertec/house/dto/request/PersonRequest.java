@@ -9,6 +9,9 @@ import ru.clevertec.house.entity.model.Sex;
 
 import java.util.UUID;
 
+/**
+ * Класс определяющий запрос от пользователя для Person
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -9,6 +9,9 @@ import lombok.experimental.FieldNameConstants;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Класс определяющий ответ от севера для House
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

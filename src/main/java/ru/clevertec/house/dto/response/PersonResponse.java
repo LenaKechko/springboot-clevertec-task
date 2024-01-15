@@ -11,6 +11,9 @@ import ru.clevertec.house.entity.model.Sex;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Класс определяющий ответ от севера для Person
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

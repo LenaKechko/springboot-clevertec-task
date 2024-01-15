@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Класс определяющий запрос от пользователя для House
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

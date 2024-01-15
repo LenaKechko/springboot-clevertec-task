@@ -16,7 +16,6 @@ import ru.clevertec.house.dto.response.HouseResponse;
 import ru.clevertec.house.dto.response.PersonResponse;
 import ru.clevertec.house.exception.BadClientRequestException;
 import ru.clevertec.house.exception.EntityNotFoundException;
-import ru.clevertec.house.exception.ValidateException;
 import ru.clevertec.house.service.PersonService;
 
 import java.util.List;

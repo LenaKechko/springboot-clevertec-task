@@ -26,6 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Класс определяющий House
+ */
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -34,50 +38,83 @@ import java.util.UUID;
 @ToString(exclude = {"residents", "owners"})
 public class House {
 
+    /**
+     * Уникальный идентификатор
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    /**
+     * Уникальный UUID
+     */
     @Column
     @UuidGenerator
     private UUID uuid;
 
+    /**
+     * Площадь дома (в кв.м.)
+     */
     @Column
     @NotNull
     private Double area;
 
+    /**
+     * Страна
+     */
     @Column
     @NotNull
     private String country;
 
+    /**
+     * Город
+     */
     @Column
     @NotNull
     private String city;
 
+    /**
+     * Улица
+     */
     @Column
     @NotNull
     private String street;
 
+    /**
+     * Номер дома
+     */
     @Column(name = "number")
     @NotNull
     private Integer numberHouse;
 
+    /**
+     * Дата создания. Не обновляется, создается единожды
+     */
     @Column(name = "create_date", insertable = true, updatable = false)
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss.SSS", iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createDate;
 
+    /**
+     * Список жителей
+     */
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
             mappedBy = "liveHouse", fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference
     private List<Person> residents;
 
+    /**
+     * Список владельцев
+     */
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "owners",
             joinColumns = @JoinColumn(name = "id_house"),
             inverseJoinColumns = @JoinColumn(name = "id_person"))
     private List<Person> owners;
 
+    /**
+     * Метод для добавления нового жителя в дом
+     */
     public void addResidentToHouse(Person person) {
         if (residents == null) {
             residents = new ArrayList<>();
@@ -85,6 +122,9 @@ public class House {
         residents.add(person);
     }
 
+    /**
+     * Метод для добавления новых жителей в дом
+     */
     public void addResidentToHouse(List<Person> person) {
         if (residents == null) {
             residents = new ArrayList<>();
@@ -92,6 +132,9 @@ public class House {
         residents.addAll(person);
     }
 
+    /**
+     * Метод для добавления нового владельца дом
+     */
     public void addOwnerToHouse(Person person) {
         if (owners == null) {
             owners = new ArrayList<>();
@@ -99,6 +142,9 @@ public class House {
         owners.add(person);
     }
 
+    /**
+     * Метод для добавления новых владельцев дома
+     */
     public void addOwnerToHouse(List<Person> person) {
         if (owners == null) {
             owners = new ArrayList<>();

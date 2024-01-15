@@ -11,6 +11,13 @@ import ru.clevertec.house.dto.response.PersonResponse;
 @Mapper(componentModel = "spring")
 public interface PersonMapper {
 
+    /**
+     * Маппит Request в сущность без id и UUID
+     * Дата создания создается по умолчанию
+     *
+     * @param personDto - DTO для маппинга
+     * @return новый человек
+     */
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "uuid", expression = "java(java.util.UUID.randomUUID())")
     @Mapping(target = "createDate", expression = "java(java.time.LocalDateTime.now())")
@@ -18,9 +25,28 @@ public interface PersonMapper {
     @Mapping(target = "liveHouse", ignore = true)
     Person toPerson(PersonRequest personDto);
 
+    /**
+     * Маппит текущий Person в Response
+     *
+     * @param person - существующий человек
+     * @return Response в нужном формате
+     */
     PersonResponse toPersonResponse(Person person);
 
+    /**
+     * Маппит текущий Person в Response без информации о проживании человека
+     *
+     * @param person - существующий человек
+     * @return Response в нужном формате
+     */
     PersonWithoutLiveHouseResponse toPersonWithoutLiveHouseResponse(Person person);
 
+    /**
+     * Сливает существующего человека с информацией из Request
+     *
+     * @param person    существующий человек
+     * @param personDto информация для обновления
+     * @return обновлённый человек
+     */
     Person update(@MappingTarget Person person, PersonRequest personDto);
 }

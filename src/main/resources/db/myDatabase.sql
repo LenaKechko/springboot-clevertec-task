@@ -90,22 +90,3 @@ INSERT INTO owners(id_house, id_person)
     values (4, 7);
 INSERT INTO owners(id_house, id_person)
     values (5, 1);
-
-    {
-        "name": "Антон",
-        "surname": "Иванов",
-        "sex": "MALE",
-        "passport": {
-            "passportSeries": "HB",
-            "passportNumber": "1012030"
-        },
-        "uuid_house": "16cc62f6-2aa9-45d3-ae82-3c4bf075390c"
-    }
-
-    {
-        "area": 20.1,
-        "country": "Беларусь",
-        "city": "Гомель",
-        "street": "Советская",
-        "numberHouse": 15
-    }

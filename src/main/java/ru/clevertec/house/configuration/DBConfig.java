@@ -14,6 +14,9 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+/**
+ * Конфигурационный класс для работы с базой данных
+ */
 @Configuration
 @PropertySource(value = "classpath:application.yml")
 public class DBConfig {
@@ -34,13 +37,22 @@ public class DBConfig {
     @Value("${spring.datasource.password}")
     private String password;
     /**
-     * Имя сервера
+     * Путь к БД
      */
     @Value("${spring.datasource.url}")
     private String url;
+
+    /**
+     * Драйвер для подключения к БД
+     */
     @Value("${spring.datasource.driver-class-name}")
     private String driver;
 
+    /**
+     * Бин для подключения к БД
+     *
+     * @return возвращается DataSource для дальнейшей работы с БД
+     */
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -51,11 +63,17 @@ public class DBConfig {
         return dataSource;
     }
 
+    /**
+     * Бин для JDBCTemplate
+     */
     @Bean
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
     }
 
+    /**
+     * Бин для конфигурации hibernate
+     */
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
@@ -70,6 +88,9 @@ public class DBConfig {
         return sessionFactory;
     }
 
+    /**
+     * Настройка транзакций
+     */
     @Bean
     public HibernateTransactionManager transactionManager() {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
