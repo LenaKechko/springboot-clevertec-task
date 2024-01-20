@@ -16,10 +16,10 @@ import java.util.List;
 /**
  * Конфигурационный класс для приложения
  */
-@EnableWebMvc
+//@EnableWebMvc
 @Configuration
-@EnableTransactionManagement
-@Import({YamlConfig.class, DBConfig.class})
+//@EnableTransactionManagement
+//@Import({YamlConfig.class, DBConfig.class})
 @ComponentScan(basePackages = "ru.clevertec.house")
 @PropertySource(value = "classpath:application.yml")
 public class AppConfig {
